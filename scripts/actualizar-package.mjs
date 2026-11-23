@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+const archivo = 'package.json';
+const pkg = JSON.parse(await fs.readFile(archivo,'utf8'));
+pkg.name = 'designfile-mcp-examen';
+pkg.description = 'MCP académico para organizar archivos de proyectos de Diseño en Finder, basado en mcp-starter-kit (main).';
+pkg.scripts['demo:crear'] = 'node scripts/crear-demo.mjs';
+pkg.scripts['configurar:designfile'] = 'node scripts/configurar-designfile.mjs';
+pkg.scripts['test:designfile'] = 'npm run build && node scripts/prueba-designfile.mjs';
+const original = pkg.scripts.test || 'npm run build && node scripts/smoke-test.mjs';
+pkg.scripts.test = original.includes('prueba-designfile.mjs') ? original : `${original} && node scripts/prueba-designfile.mjs`;
+await fs.writeFile(archivo,JSON.stringify(pkg,null,2)+'\n');

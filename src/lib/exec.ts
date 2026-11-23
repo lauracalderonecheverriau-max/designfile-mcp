@@ -1,0 +1,2 @@
+import { execFile } from "node:child_process";
+export function run(comando:string,args:string[]=[],opciones:{env?:Record<string,string>}={}) {return new Promise<{code:number,stdout:string,stderr:string}>(resolve=>{execFile(comando,args,{encoding:"utf8",timeout:30000,env:{...process.env,...opciones.env}},(err,stdout,stderr)=>resolve({code:err?.code&&typeof err.code==="number"?err.code:err?1:0,stdout:String(stdout),stderr:String(stderr)}));});}
